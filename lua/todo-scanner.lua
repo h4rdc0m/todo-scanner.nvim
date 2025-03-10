@@ -37,10 +37,11 @@ local function compile_patterns()
   for extension, _ in pairs(config.comment_patterns) do
     local todo_tags = table.concat(config.todo_tags, "|")
     local patterns = config.comment_patterns[extension] or nil
-    if not patterns then continue end
-    compiled_patterns[extension] = {}
-    for _, pattern in ipairs(patterns) do
-      table.insert(compiled_patterns[extension], pattern:gsub("{TODO_TAGS}", todo_tags))
+    if not patterns then
+      compiled_patterns[extension] = {}
+      for _, pattern in ipairs(patterns) do
+        table.insert(compiled_patterns[extension], pattern:gsub("{TODO_TAGS}", todo_tags))
+      end
     end
   end
 end
