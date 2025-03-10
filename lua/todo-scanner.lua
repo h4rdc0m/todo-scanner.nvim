@@ -43,6 +43,7 @@ local function compile_patterns()
     compiled_patterns[extension] = {} -- Initialize the table
     for _, pattern in ipairs(patterns) do
       local p = pattern:gsub("{TODO_TAGS}", todo_tags)
+      vim.notify("Compiling pattern: " .. extension .. ": " .. p)
       table.insert(compiled_patterns[extension], p)
     end
   end
