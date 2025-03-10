@@ -78,8 +78,8 @@ function M.setup_autocmds()
   vim.cmd([[
     augroup TodoUpdate
     autocmd!
-      autocmd BufWritePost * lua require('todo').update_todos()
-      autocmd BufDelete * lua require('todo').update_todos()
+      autocmd BufWritePost * lua require('todo-scanner').update_todos()
+      autocmd BufDelete * lua require('todo-scanner').update_todos()
     augroup END
   ]])
 end
