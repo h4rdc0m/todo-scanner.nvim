@@ -56,7 +56,6 @@ local function is_todo_comment(line, extension)
   local patterns = compiled_patterns[extension]
   if not patterns then return false end
   for _, pattern in ipairs(patterns) do
-    print(pattern)
     if line:match(pattern) then
       return true
     end
