@@ -5,6 +5,13 @@ local use_orgmode = false
 
 local uv = vim.loop
 
+-- Trim whitespace from the beginning and end of a string.
+-- @param str string: The string to trim.
+-- @return string: The trimmed string.
+local function trim(str)
+  return str:match("^%s*(.-)%s*$")
+end
+
 -- Recursively scan a directory for files and collect todo comments.
 -- @param path string: The path to the directory to scan.
 -- @param todos table: The table to store the todo comments in.
@@ -32,7 +39,7 @@ local function scan_dir(dir, todos)
             table.insert(todos, {
               file = name,
               line = line_num,
-              text = line:trim()
+              text = trim(line),
             })
           end
         end
