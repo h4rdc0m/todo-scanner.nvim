@@ -1,0 +1,15 @@
+#+TITLE: TODOs
+#+STARTUP: content
+#+OPTIONS: toc:nil num:nil todo:t pri:nil tags:nil ^:nil
+* TODOs
+*** TODO C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:8 - -- Recursively scan a directory for files and collect todo comments.
+*** TODO C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:10 - -- @param todos table: The table to store the todo comments in.
+*** TODO C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:29 -           -- Look for todo comments
+*** TODO C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:30 -           -- TODO: Add support for custom todo patterns
+*** TODO C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:31 -           if line:lower():find("todo ") or line:lower():find("todo: ") then
+*** TODO C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:45 - -- Upate the todo file
+*** TODO C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:56 -     table.insert(lines, "#+TODO: TODO | DONE")
+*** TODO C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:59 -     for _, todo in ipairs(todos) do
+*** TODO C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:60 -       table.insert(lines, string.format("** TODO %s:%d - %s", todo.file, todo.line, todo.text))
+*** TODO C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:64 -     for _, todo in ipairs(todos) do
+*** TODO C:\Users\hardc\source\repos\todo-scanner.nvim/README.md:1 - # NeoVim TODO scanner

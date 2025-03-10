@@ -30,9 +30,9 @@ local function scan_dir(dir, todos)
           -- TODO: Add support for custom todo patterns
           if line:lower():find("todo ") or line:lower():find("todo: ") then
             table.insert(todos, {
-              file = full_path,
+              file = name,
               line = line_num,
-              text = line
+              text = line:trim()
             })
           end
         end
@@ -53,9 +53,11 @@ function M.update_todos()
     table.insert(lines, "#+TITLE: TODOs")
     table.insert(lines, "#+STARTUP: content")
     table.insert(lines, "#+OPTIONS: toc:nil num:nil todo:t pri:nil tags:nil ^:nil")
+    table.insert(lines, "#+TODO: TODO | DONE")
+    table.insert(lines, "")
     table.insert(lines, "* TODOs")
     for _, todo in ipairs(todos) do
-      table.insert(lines, string.format("*** TODO %s:%d - %s", todo.file, todo.line, todo.text))
+      table.insert(lines, string.format("** TODO %s:%d - %s", todo.file, todo.line, todo.text))
     end
   else
     table.insert(lines, "* TODOs")
