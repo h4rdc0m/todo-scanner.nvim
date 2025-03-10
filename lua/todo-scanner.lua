@@ -1,6 +1,7 @@
 -- TODO: Add support for more file types
 -- TODO: Add support for more comment patterns
 -- TODO: Modularize code
+-- TODO: Add support for inline todo's
 
 local M = {}
 
@@ -8,16 +9,16 @@ local M = {}
 local config = {
   orgmode = false, -- Default to markdown
   comment_patterns = {
-    lua = { "--%s*({TODO_TAG})" },
-    js = { "//%s*({TODO_TAG})", "/%*%s*({TODO_TAG})" },
-    ts = { "//%s*({TODO_TAG})", "/%*%s*({TODO_TAG})" },
-    py = { "#%s*({TODO_TAG})" },
-    sh = { "#%s*({TODO_TAG})" },
-    c = { "//%s*({TODO_TAG})", "/%*%s*({TODO_TAG})" },
-    h = { "//%s*({TODO_TAG})", "/%*%s*({TODO_TAG})" },
-    cpp = { "//%s*({TODO_TAG})", "/%*%s*({TODO_TAG})" },
-    hpp = { "//%s*({TODO_TAG})", "/%*%s*({TODO_TAG})" },
-    rust = { "//%s*({TODO_TAG})" },
+    lua = { "^%s*%-%-%s*({TODO_TAG})" },
+    js = { "^%s*//%s*({TODO_TAG})", "^%s*/%*%s*({TODO_TAG})" },
+    ts = { "^%s*//%s*({TODO_TAG})", "^%s*/%*%s*({TODO_TAG})" },
+    py = { "^%s*#%s*({TODO_TAG})" },
+    sh = { "^%s*#%s*({TODO_TAG})" },
+    c = { "^%s*//%s*({TODO_TAG})", "^%s*/%*%s*({TODO_TAG})" },
+    h = { "^%s*//%s*({TODO_TAG})", "^%s*/%*%s*({TODO_TAG})" },
+    cpp = { "^%s*//%s*({TODO_TAG})", "^%s*/%*%s*({TODO_TAG})" },
+    hpp = { "^%s*//%s*({TODO_TAG})", "^%s*/%*%s*({TODO_TAG})" },
+    rust = { "^%s*//%s*({TODO_TAG})" },
   },
   todo_tags = { "TODO:", "FIXME:", "HACK:", "NOTE:" },
   exclude_dirs = { "vendor", "node_modules", ".git" },
