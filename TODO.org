@@ -1,5 +1,10 @@
+#+TITLE: TODOs
+#+STARTUP: content
+#+OPTIONS: toc:nil num:nil todo:t pri:nil tags:nil ^:nil
+#+TODO: TODO | DONE
+
 * TODOs
-- C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:1 - -- TODO: Add support for more file types
-- C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:2 - -- TODO: Add support for more comment patterns
-- C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:3 - -- TODO: Modularize code
-- C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:4 - -- TODO: Add support for inline todo's
+** TODO lua/todo-scanner.lua:1 - -- TODO: Add support for more file types
+** TODO lua/todo-scanner.lua:2 - -- TODO: Add support for more comment patterns
+** TODO lua/todo-scanner.lua:3 - -- TODO: Modularize code
+** TODO lua/todo-scanner.lua:4 - -- TODO: Add support for inline todo's

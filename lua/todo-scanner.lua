@@ -108,6 +108,19 @@ local function scan_dir(dir, todos)
   end
 end
 
+-- Format a todo comment for the todo file.
+-- @param todo table: The todo comment.
+-- @return string: The formatted todo comment.
+local function format_todo(todo)
+  if config.orgmode then
+    -- Org-mode link: [[file:relative/path::line][relative/path:line - text]]
+    return string.format("** TODO [[file:%s::%d][%s:%d - %s]]", todo.file, todo.line, todo.file, todo.line, todo.text)
+  else
+    -- Markdown link: [relative/path:line - text](relative/path#Lline)
+    return string.format("- [%s:%d - %s](%s#L%d)", todo.file, todo.line, todo.text, todo.file, todo.line)
+  end
+end
+
 -- Upate the todo file
 function M.update_todos()
   local todos = {}
@@ -123,12 +136,12 @@ function M.update_todos()
     table.insert(lines, "")
     table.insert(lines, "* TODOs")
     for _, todo in ipairs(todos) do
-      table.insert(lines, string.format("** TODO %s:%d - %s", todo.file, todo.line, todo.text))
+      table.insert(lines, format_todo(todo))
     end
   else
     table.insert(lines, "# TODOs")
     for _, todo in ipairs(todos) do
-      table.insert(lines, string.format("- %s:%d - %s", todo.file, todo.line, todo.text))
+      table.insert(lines, format_todo(todo))
     end
   end
 
