@@ -1,3 +1,7 @@
+-- TODO: Add support for more file types
+-- TODO: Add support for more comment patterns
+-- TODO: Modularize code
+
 local M = {}
 
 -- Default config
@@ -34,14 +38,11 @@ end
 -- Compile the patterns for each file type.
 -- This replaces the {TODO_TAGS} placeholder with the configured todo tags.
 local function compile_patterns()
-  for extension, _ in pairs(config.comment_patterns) do
-    local todo_tags = table.concat(config.todo_tags, "|")
-    local patterns = config.comment_patterns[extension] or nil
-    if not patterns then
-      compiled_patterns[extension] = {}
-      for _, pattern in ipairs(patterns) do
-        table.insert(compiled_patterns[extension], pattern:gsub("{TODO_TAGS}", todo_tags))
-      end
+  local todo_tags = table.concat(config.todo_tags, "|")
+  for extension, patterns in pairs(config.comment_patterns) do
+    compiled_patterns[extension] = {} -- Initialize the table
+    for _, pattern in ipairs(patterns) do
+      table.insert(compiled_patterns[extension], pattern:gsub("{TODO_TAGS}", todo_tags))
     end
   end
 end
@@ -54,6 +55,7 @@ local function is_todo_comment(line, extension)
   local patterns = compiled_patterns[extension]
   if not patterns then return false end
   for _, pattern in ipairs(patterns) do
+    print(pattern)
     if line:match(pattern) then
       return true
     end
@@ -89,7 +91,7 @@ local function scan_dir(dir, todos)
             line_num = line_num + 1
             if is_todo_comment(line, extension) then
               table.insert(todos, {
-                file = full_path.gsub("^" .. vim.fn.getcwd(), ""),
+                file = full_path:gsub("^" .. vim.fn.getcwd(), ""),
                 line = line_num,
                 text = trim(line),
               })
@@ -109,7 +111,7 @@ function M.update_todos()
   scan_dir(cwd, todos)
 
   local lines = {}
-  if use_orgmode then
+  if config.use_orgmode then
     table.insert(lines, "#+TITLE: TODOs")
     table.insert(lines, "#+STARTUP: content")
     table.insert(lines, "#+OPTIONS: toc:nil num:nil todo:t pri:nil tags:nil ^:nil")
@@ -126,15 +128,15 @@ function M.update_todos()
     end
   end
 
-  local filename = use_orgmode and "TODO.org" or "TODO.md"
+  local filename = config.orgmode and "TODO.org" or "TODO.md"
   local full_path = cwd .. '/' .. filename
   local f = io.open(full_path, "w")
   if f then
     f:write(table.concat(lines, "\n"))
     f:close()
-    print("Updated " .. filename .. " with " .. tostring(#todos) .. " TODO(s).")
+    vim.notify("Updated " .. filename .. " with " .. tostring(#todos) .. " TODO(s).")
   else
-    print("Failed to open " .. filename .. " for writing.")
+    vim.notify("Failed to open " .. filename .. " for writing.")
   end
 end
 
@@ -154,9 +156,6 @@ end
 function M.setup(user_config)
   if user_config then
     config = vim.tbl_deep_extend("force", config, user_config)
-    if config.orgmode then
-      config.orgmode = pcall(require, 'orgmode')
-    end
   end
   compile_patterns()
   M.setup_autocmds()
