@@ -38,7 +38,7 @@ local function compile_patterns()
     local todo_tags = table.concat(config.todo_tags, "|")
     local patterns = config.comment_patterns[extension] or {}
     for _, pattern in ipairs(patterns) do
-      compiled_patterns[extension] = pattern:gsub("{TODO_TAGS}", todo_tags)
+      table.insert(compiled_patterns[extension], pattern:gsub("{TODO_TAGS}", todo_tags))
     end
   end
 end
