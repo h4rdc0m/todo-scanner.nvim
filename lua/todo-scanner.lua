@@ -17,7 +17,7 @@ local function scan_dir(dir, todos)
     if not name then break end
     local full_path = dir .. '/' .. name
     if type == "directory" then
-      if name ~= "vendor" and name ~= "node_modules" then
+      if name ~= "vendor" and name ~= "node_modules" and name ~= ".git" then
         scan_dir(full_path, todos)
       end
     elseif type == "file" then
@@ -28,7 +28,7 @@ local function scan_dir(dir, todos)
           line_num = line_num + 1
           -- Look for todo comments
           -- TODO: Add support for custom todo patterns
-          if line:lower():find("todo") then
+          if line:lower():find("todo ") or line:lower():find("todo: ") then
             table.insert(todos, {
               path = full_path,
               line = line_num,
@@ -51,6 +51,9 @@ function M.update_todos()
   local lines = {}
   if use_orgmode then
     table.insert(lines, "#+TITLE: TODOs")
+    table.insert(lines, "#+STARTUP: content")
+    table.insert(lines, "#+OPTIONS: toc:nil num:nil todo:t pri:nil tags:nil ^:nil")
+    table.insert(lines, "* TODOs")
     for _, todo in ipairs(todos) do
       table.insert(lines, string.format("* %s:%d - %s", todo.file, todo.line, todo.text))
     end
