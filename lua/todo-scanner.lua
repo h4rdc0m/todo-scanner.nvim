@@ -93,8 +93,9 @@ local function scan_dir(dir, todos)
           for line in f:lines() do
             line_num = line_num + 1
             if is_todo_comment(line, extension) then
+              local pattern = "^" .. vim.fn.getcwd():gsub("([%%%^%$%(%)%%.%[%]*%+%-%?])", "%%%1") .. "[/\\]?"
               table.insert(todos, {
-                file = full_path:gsub("^" .. vim.fn.getcwd(), ""),
+                file = full_path:gsub(pattern, ""),
                 line = line_num,
                 text = trim(line),
               })
@@ -125,7 +126,7 @@ function M.update_todos()
       table.insert(lines, string.format("** TODO %s:%d - %s", todo.file, todo.line, todo.text))
     end
   else
-    table.insert(lines, "* TODOs")
+    table.insert(lines, "# TODOs")
     for _, todo in ipairs(todos) do
       table.insert(lines, string.format("- %s:%d - %s", todo.file, todo.line, todo.text))
     end
