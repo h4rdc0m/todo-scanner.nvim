@@ -24,6 +24,9 @@ local config = {
   todo_tags = { "TODO:", "FIXME:", "HACK:", "NOTE:" },
   exclude_dirs = { "vendor", "node_modules", ".git" },
   exclude_files = { "TODO.org", "TODO.md" },
+  keymap = {
+    update_todos = "<leader>ut",
+  }
 }
 
 local uv = vim.loop
@@ -66,7 +69,6 @@ local function is_todo_comment(line, extension)
   end
   return false
 end
-
 
 
 -- Recursively scan a directory for files and collect todo comments.
@@ -122,6 +124,12 @@ local function format_todo(todo)
   end
 end
 
+-- Map the keybindings
+local function map_keys()
+  vim.api.nvim_set_keymap("n", config.keymap.update_todos, "<cmd>lua require('todo-scanner').update_todos()<CR>",
+    { noremap = true, silent = true })
+end
+
 -- Upate the todo file
 function M.update_todos()
   local todos = {}
@@ -158,17 +166,6 @@ function M.update_todos()
   end
 end
 
--- Setup the autocmds
-function M.setup_autocmds()
-  vim.cmd([[
-    augroup TodoUpdate
-    autocmd!
-      autocmd BufWritePost * lua require('todo-scanner').update_todos()
-      autocmd BufDelete * lua require('todo-scanner').update_todos()
-    augroup END
-  ]])
-end
-
 -- This sets up the plugin config
 -- @param config table: The configuration options
 function M.setup(user_config)
@@ -176,7 +173,7 @@ function M.setup(user_config)
     config = vim.tbl_deep_extend("force", config, user_config)
   end
   compile_patterns()
-  M.setup_autocmds()
+  map_keys()
 end
 
 return M
