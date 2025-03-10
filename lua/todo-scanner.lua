@@ -19,6 +19,7 @@ local config = {
     cpp = { "^%s*//%s*({TODO_TAG})", "^%s*/%*%s*({TODO_TAG})" },
     hpp = { "^%s*//%s*({TODO_TAG})", "^%s*/%*%s*({TODO_TAG})" },
     rust = { "^%s*//%s*({TODO_TAG})" },
+    php = { "^%s*//%s*({TODO_TAG})", "^%s*/%*%s*({TODO_TAG})" },
   },
   todo_tags = { "TODO:", "FIXME:", "HACK:", "NOTE:" },
   exclude_dirs = { "vendor", "node_modules", ".git" },

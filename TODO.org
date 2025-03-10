@@ -4,7 +4,7 @@
 #+TODO: TODO | DONE
 
 * TODOs
-** TODO lua/todo-scanner.lua:1 - -- TODO: Add support for more file types
-** TODO lua/todo-scanner.lua:2 - -- TODO: Add support for more comment patterns
-** TODO lua/todo-scanner.lua:3 - -- TODO: Modularize code
-** TODO lua/todo-scanner.lua:4 - -- TODO: Add support for inline todo's
+** TODO [[file:lua/todo-scanner.lua::1][lua/todo-scanner.lua:1 - -- TODO: Add support for more file types]]
+** TODO [[file:lua/todo-scanner.lua::2][lua/todo-scanner.lua:2 - -- TODO: Add support for more comment patterns]]
+** TODO [[file:lua/todo-scanner.lua::3][lua/todo-scanner.lua:3 - -- TODO: Modularize code]]
+** TODO [[file:lua/todo-scanner.lua::4][lua/todo-scanner.lua:4 - -- TODO: Add support for inline todo's]]
