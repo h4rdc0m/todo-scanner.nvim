@@ -8,16 +8,16 @@ local M = {}
 local config = {
   orgmode = false, -- Default to markdown
   comment_patterns = {
-    lua = { "--%s*({TODO_TAGS})" },
-    js = { "//%s*({TODO_TAGS})", "/%*%s*({TODO_TAGS})" },
-    ts = { "//%s*({TODO_TAGS})", "/%*%s*({TODO_TAGS})" },
-    py = { "#%s*({TODO_TAGS})" },
-    sh = { "#%s*({TODO_TAGS})" },
-    c = { "//%s*({TODO_TAGS})", "/%*%s*({TODO_TAGS})" },
-    h = { "//%s*({TODO_TAGS})", "/%*%s*({TODO_TAGS})" },
-    cpp = { "//%s*({TODO_TAGS})", "/%*%s*({TODO_TAGS})" },
-    hpp = { "//%s*({TODO_TAGS})", "/%*%s*({TODO_TAGS})" },
-    rust = { "//%s*({TODO_TAGS})" },
+    lua = { "--%s*({TODO_TAG})" },
+    js = { "//%s*({TODO_TAG})", "/%*%s*({TODO_TAG})" },
+    ts = { "//%s*({TODO_TAG})", "/%*%s*({TODO_TAG})" },
+    py = { "#%s*({TODO_TAG})" },
+    sh = { "#%s*({TODO_TAG})" },
+    c = { "//%s*({TODO_TAG})", "/%*%s*({TODO_TAG})" },
+    h = { "//%s*({TODO_TAG})", "/%*%s*({TODO_TAG})" },
+    cpp = { "//%s*({TODO_TAG})", "/%*%s*({TODO_TAG})" },
+    hpp = { "//%s*({TODO_TAG})", "/%*%s*({TODO_TAG})" },
+    rust = { "//%s*({TODO_TAG})" },
   },
   todo_tags = { "TODO:", "FIXME:", "HACK:", "NOTE:" },
   exclude_dirs = { "vendor", "node_modules", ".git" },
@@ -36,15 +36,16 @@ local function trim(str)
 end
 
 -- Compile the patterns for each file type.
--- This replaces the {TODO_TAGS} placeholder with the configured todo tags.
+-- This replaces the {TODO_TAG} placeholder with the configured todo tag.
 local function compile_patterns()
-  local todo_tags = table.concat(config.todo_tags, "|")
   for extension, patterns in pairs(config.comment_patterns) do
     compiled_patterns[extension] = {} -- Initialize the table
-    for _, pattern in ipairs(patterns) do
-      local p = pattern:gsub("{TODO_TAGS}", todo_tags)
-      vim.notify("Compiling pattern: " .. extension .. ": " .. p)
-      table.insert(compiled_patterns[extension], p)
+    for _, base_pattern in ipairs(patterns) do
+      for _, tag in ipairs(config.todo_tags) do
+        local p = base_pattern:gsub("{TODO_TAG}", tag)
+        vim.notify("Compiling pattern for " .. extension .. ": " .. p)
+        table.insert(compiled_patterns[extension], p)
+      end
     end
   end
 end
