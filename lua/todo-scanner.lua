@@ -20,7 +20,7 @@ local function scan_dir(dir, todos)
       if name ~= "vendor" and name ~= "node_modules" and name ~= ".git" then
         scan_dir(full_path, todos)
       end
-    elseif type == "file" then
+    elseif type == "file" and name ~= "TODO.org" and name ~= "TODO.md" then
       local f = io.open(full_path, "r")
       if f then
         local line_num = 0
