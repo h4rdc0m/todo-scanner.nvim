@@ -114,7 +114,7 @@ function M.update_todos()
   scan_dir(cwd, todos)
 
   local lines = {}
-  if config.use_orgmode then
+  if config.orgmode then
     table.insert(lines, "#+TITLE: TODOs")
     table.insert(lines, "#+STARTUP: content")
     table.insert(lines, "#+OPTIONS: toc:nil num:nil todo:t pri:nil tags:nil ^:nil")

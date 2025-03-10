@@ -3,5 +3,3 @@
 - C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:2 - -- TODO: Add support for more comment patterns
 - C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:3 - -- TODO: Modularize code
 - C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:4 - -- TODO: Add support for inline todo's
-- C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:23 - todo_tags = { "TODO:", "FIXME:", "HACK:", "NOTE:" },
-- C:\Users\hardc\source\repos\todo-scanner.nvim/lua/todo-scanner.lua:121 - table.insert(lines, "#+TODO: TODO | DONE")
