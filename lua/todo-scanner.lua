@@ -1,9 +1,28 @@
 local M = {}
 
--- Check if org-mode is installed
-local use_orgmode = false
+-- Default config
+local config = {
+  orgmode = false, -- Default to markdown
+  comment_patterns = {
+    lua = { "--%s*({TODO_TAGS})" },
+    js = { "//%s*({TODO_TAGS})", "/%*%s*({TODO_TAGS})" },
+    ts = { "//%s*({TODO_TAGS})", "/%*%s*({TODO_TAGS})" },
+    py = { "#%s*({TODO_TAGS})" },
+    sh = { "#%s*({TODO_TAGS})" },
+    c = { "//%s*({TODO_TAGS})", "/%*%s*({TODO_TAGS})" },
+    h = { "//%s*({TODO_TAGS})", "/%*%s*({TODO_TAGS})" },
+    cpp = { "//%s*({TODO_TAGS})", "/%*%s*({TODO_TAGS})" },
+    hpp = { "//%s*({TODO_TAGS})", "/%*%s*({TODO_TAGS})" },
+    rust = { "//%s*({TODO_TAGS})" },
+  },
+  todo_tags = { "TODO:", "FIXME:", "HACK:", "NOTE:" },
+  exclude_dirs = { "vendor", "node_modules", ".git" },
+  exclude_files = { "TODO.org", "TODO.md" },
+}
 
 local uv = vim.loop
+
+local compiled_patterns = {}
 
 -- Trim whitespace from the beginning and end of a string.
 -- @param str string: The string to trim.
@@ -11,6 +30,35 @@ local uv = vim.loop
 local function trim(str)
   return str:match("^%s*(.-)%s*$")
 end
+
+-- Compile the patterns for each file type.
+-- This replaces the {TODO_TAGS} placeholder with the configured todo tags.
+local function compile_patterns()
+  for extension, _ in pairs(config.comment_patterns) do
+    local todo_tags = table.concat(config.todo_tags, "|")
+    local patterns = config.comment_patterns[extension] or {}
+    for _, pattern in ipairs(patterns) do
+      table.insert(compiled_patterns, pattern:gsub("{TODO_TAGS}", todo_tags))
+    end
+  end
+end
+
+-- Check if a line is a todo comment.
+-- @param line string: The line to check.
+-- @param extension string: The file extension.
+-- @return boolean: Whether the line is a todo comment.
+local function is_todo_comment(line, extension)
+  local patterns = compiled_patterns[extension]
+  if not patterns then return false end
+  for _, pattern in ipairs(patterns) do
+    if line:match(pattern) then
+      return true
+    end
+  end
+  return false
+end
+
+
 
 -- Recursively scan a directory for files and collect todo comments.
 -- @param path string: The path to the directory to scan.
@@ -23,27 +71,29 @@ local function scan_dir(dir, todos)
     local name, type = uv.fs_scandir_next(fd)
     if not name then break end
     local full_path = dir .. '/' .. name
+
     if type == "directory" then
-      if name ~= "vendor" and name ~= "node_modules" and name ~= ".git" then
+      if not vim.tbl_contains(config.exclude_dirs, name) then
         scan_dir(full_path, todos)
       end
-    elseif type == "file" and name ~= "TODO.org" and name ~= "TODO.md" then
-      local f = io.open(full_path, "r")
-      if f then
-        local line_num = 0
-        for line in f:lines() do
-          line_num = line_num + 1
-          -- Look for todo comments
-          -- TODO: Add support for custom todo patterns
-          if line:lower():find("todo ") or line:lower():find("todo: ") then
-            table.insert(todos, {
-              file = name,
-              line = line_num,
-              text = trim(line),
-            })
+    elseif type == "file" and not vim.tbl_contains(config.exclude_files, name) then
+      local extension = name:match("%.([^%.]+)$")
+      if extension and config.comment_patterns[extension] then
+        local f = io.open(full_path, "r")
+        if f then
+          local line_num = 0
+          for line in f:lines() do
+            line_num = line_num + 1
+            if is_todo_comment(line, extension) then
+              table.insert(todos, {
+                file = full_path.gsub("^" .. vim.fn.getcwd(), ""),
+                line = line_num,
+                text = trim(line),
+              })
+            end
           end
+          f:close()
         end
-        f:close()
       end
     end
   end
@@ -98,12 +148,14 @@ end
 
 -- This sets up the plugin config
 -- @param config table: The configuration options
-function M.setup(config)
-  if config then
+function M.setup(user_config)
+  if user_config then
+    config = vim.tbl_deep_extend("force", config, user_config)
     if config.orgmode then
-      use_orgmode = pcall(require, 'orgmode')
+      config.orgmode = pcall(require, 'orgmode')
     end
   end
+  compile_patterns()
   M.setup_autocmds()
 end
 
