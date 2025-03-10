@@ -42,7 +42,8 @@ local function compile_patterns()
   for extension, patterns in pairs(config.comment_patterns) do
     compiled_patterns[extension] = {} -- Initialize the table
     for _, pattern in ipairs(patterns) do
-      table.insert(compiled_patterns[extension], pattern:gsub("{TODO_TAGS}", todo_tags))
+      local p = pattern:gsub("{TODO_TAGS}", todo_tags)
+      table.insert(compiled_patterns[extension], p)
     end
   end
 end
