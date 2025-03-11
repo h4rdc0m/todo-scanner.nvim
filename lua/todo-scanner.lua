@@ -48,7 +48,6 @@ local function compile_patterns()
     for _, base_pattern in ipairs(patterns) do
       for _, tag in ipairs(config.todo_tags) do
         local p = base_pattern:gsub("{TODO_TAG}", tag)
-        vim.notify("Compiling pattern for " .. extension .. ": " .. p)
         table.insert(compiled_patterns[extension], p)
       end
     end
